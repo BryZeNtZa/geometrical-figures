@@ -1,0 +1,236 @@
+<!-- Toolbar -->
+<div class="toolbar" role="banner">
+  <img
+    width="40"
+    alt="Angular Logo"
+    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg=="
+  />
+  <span>Geometric figures</span>
+  <div class="spacer"></div>
+</div>
+
+<!-- templates -->
+
+<!-- Rectangle template -->
+<ng-template #rectangleForm>
+  <h2>Enter the rectangle height and width</h2>
+  <form>
+    <fieldset>
+      <div class="form-group" style="margin-bottom: 10px">
+        <label style="display: inline-block; width: 50px">Height</label>
+        <input #rectangleLength
+        type="text" style="padding: 5px" class="form-control rectangle-height"
+        (keyup)="rectangleLength.value=$any($event.target).value">
+      </div>
+
+      <div class="form-group">
+        <label style="display: inline-block; width: 50px">Width</label>
+        <input #rectangleWidth
+        type="text" style="padding: 5px" class="form-control rectangle-width"
+        (keyup)="rectangleWidth.value=$any($event.target).value">
+      </div>
+    </fieldset>
+  </form>
+  <div id="output-panel" #outpout style="border: 1px solid gree; color: green; padding: 5px; margin-top: 15px">
+    <div *ngIf="mesure.value=='perimeter'" class="perimeter">
+      <strong>Perimeter:</strong>&nbsp;&nbsp;<span class="value">{{(toNumber(rectangleLength.value)+toNumber(rectangleWidth.value))*2}}</span> &nbsp; {{ defaultUnit }}
+    </div>
+    <div *ngIf="mesure.value=='area'" class="area">
+      <strong>Area:</strong>&nbsp;&nbsp;<span class="value">{{(toNumber(rectangleLength.value)*toNumber(rectangleWidth.value))}}</span> &nbsp; {{ defaultUnit }} <sup>2</sup>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Square form template -->
+<ng-template #squareForm>
+  <h2>Enter the square side length</h2>
+  <form>
+    <fieldset>
+      <div class="form-group" style="margin-bottom: 10px">
+        <label style="display: inline-block; width: 50px">Side length</label>
+        <input #squareSide
+        type="text" style="padding: 5px" class="form-control"
+        (keyup)="squareSide.value=$any($event.target).value">
+      </div>
+    </fieldset>
+  </form>
+  <div #outpout>
+    <div *ngIf="mesure.value=='perimeter'">
+      <strong>Perimeter:</strong>&nbsp;&nbsp;{{toNumber(squareSide.value)*4}} &nbsp; {{ defaultUnit }}
+    </div>
+    <div *ngIf="mesure.value=='area'">
+      <strong>Area:</strong>&nbsp;&nbsp;{{(toNumber(squareSide.value)*toNumber(squareSide.value))}} &nbsp; {{ defaultUnit }} <sup>2</sup>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Circle form template -->
+<ng-template #circleForm>
+  <h2>Enter the length of the circle's radius</h2>
+  <form>
+    <fieldset>
+      <div class="form-group" style="margin-bottom: 10px">
+        <label style="display: inline-block; width: 50px">Circle radius</label>
+        <input #circleRadius
+        type="text" style="padding: 5px" class="form-control"
+        (keyup)="circleRadius.value=$any($event.target).value">
+      </div>
+    </fieldset>
+  </form>
+  <div #outpout style="border: 1px solid gree; color: green; padding: 5px; margin-top: 15px">
+    <div *ngIf="mesure.value=='perimeter'">
+      <strong>Perimeter:</strong>&nbsp;&nbsp;{{toNumber(circleRadius.value)*pi*2}} &nbsp; {{ defaultUnit }}
+    </div>
+    <div *ngIf="mesure.value=='area'">
+      <strong>Area:</strong>&nbsp;&nbsp;{{toNumber(circleRadius.value)*toNumber(circleRadius.value)*pi}} &nbsp; {{ defaultUnit }} <sup>2</sup>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Triangle form template -->
+<ng-template #triangleForm>
+  <div *ngIf="mesure.value=='perimeter'; else areaForm">
+    <h2>Enter the triangle side lengths</h2>
+    <form #triangle="ngForm">
+      <fieldset>
+        <div class="form-group" style="margin-bottom: 10px">
+          <label style="display: inline-block; width: 50px">Side 1</label>
+          <input #triangleSide1
+          type="text" style="padding: 5px" class="form-control"
+          (keyup)="triangleSide1.value=$any($event.target).value">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 10px">
+          <label style="display: inline-block; width: 50px">Side 2</label>
+          <input #triangleSide2
+          type="text"  style="padding: 5px" class="form-control"
+          (keyup)="triangleSide2.value=$any($event.target).value">
+        </div>
+
+        <div class="form-group">
+          <label style="display: inline-block; width: 50px">Side 3</label>
+          <input #triangleSide3
+          type="text"  style="padding: 5px" class="form-control"
+          (keyup)="triangleSide3.value=$any($event.target).value">
+        </div>
+      </fieldset>
+    </form>
+
+    <div #outpout style="border: 1px solid gree; color: green; padding: 5px; margin-top: 15px">
+      <strong>Perimeter:</strong>&nbsp;&nbsp;{{
+        toNumber(triangleSide1.value)+toNumber(triangleSide2.value) + toNumber(triangleSide3.value)
+      }} &nbsp; {{ defaultUnit }}
+    </div>
+  </div>
+
+  <ng-template #areaForm>
+    <h2>Enter the triangle base and height</h2>
+    <form #triangle="ngForm">
+      <fieldset>
+        <div class="form-group" style="margin-bottom: 10px">
+          <label style="display: inline-block; width: 50px">Base</label>
+          <input #triangleBaseSide
+          type="text" style="padding: 5px" class="form-control"
+          (keyup)="triangleBaseSide.value=$any($event.target).value">
+        </div>
+
+        <div class="form-group">
+          <label style="display: inline-block; width: 50px">Height</label>
+          <input #triangleBaseSideH
+          type="text" style="padding: 5px" class="form-control"
+          (keyup)="triangleBaseSideH.value=$any($event.target).value">
+        </div>
+      </fieldset>
+    </form>
+
+    <div #outpout style="border: 1px solid gree; color: green; padding: 5px; margin-top: 15px">
+      <strong>Area:</strong>&nbsp;&nbsp;{{
+        toNumber(triangleBaseSide.value)*toNumber(triangleBaseSideH.value) / 2
+      }} &nbsp; {{ defaultUnit }} <sup>2</sup>
+    </div>
+  </ng-template>
+
+</ng-template>
+
+<div class="content" role="main">
+
+  <table>
+      <tr>
+        <td id="figures-panel" valign="top" style="text-align: center;">
+          <h2>Choose a geometric figure</h2>
+          <input type="hidden" #selection>
+          <div class="card-container rectangle" style="margin-bottom: 50px;">
+            <button id="f" class="card" (click)="selection.value = 'rectangle'" tabindex="0">
+              <img src="assets/rectangle.gif" style="height: 30px" /> &nbsp;&nbsp;
+              <span>Rectangle</span>
+            </button>
+            <br />
+            <button class="card" (click)="selection.value = 'square'" tabindex="0">
+              <img src="assets/square.png" style="height: 30px" /> &nbsp;&nbsp;
+              <span>Square</span>
+            </button>
+            <br />
+            <button class="card" (click)="selection.value = 'circle'" tabindex="0">
+              <img src="assets/circle.png" style="height: 30px" /> &nbsp;&nbsp;
+              <span>Circle</span>
+            </button>
+
+            <button class="card" (click)="selection.value = 'triangle'" tabindex="0">
+              <img src="assets/triangle.png" style="height: 30px" /> &nbsp;&nbsp;
+              <span>Triangle</span>
+            </button>
+
+          </div>
+        </td>
+
+        <!-- Forms -->
+        <td>
+          <h2>Which measure do you want to calculate ?</h2>
+          <div id="measure-choices" style="margin-bottom: 50px;">
+            <form #m="ngForm">
+              <input type="hidden" #mesure value="perimeter">
+              <input type="radio" name="mesure" (click)="mesure.value='perimeter'" checked>Perimeter
+              &nbsp;&nbsp;&nbsp;
+              <input #mArea type="radio" value="area" name="mesure" (click)="mesure.value='area'">Area
+            </form>
+          </div>
+
+          <h2>Choose a measure unit</h2>
+          <div style="margin-bottom: 50px;">
+            <select #u (change)="defaultUnit=u.value=$any($event.target).value">
+              <option *ngFor="let unit of units"
+                      [value]="unit" [selected]="unit === defaultUnit">
+                      {{unit}}
+              </option>
+            </select>
+          </div>
+
+          <div [ngSwitch]="selection.value">
+            <div id="rectangleForm" *ngSwitchCase="'rectangle'">
+              <ng-container *ngTemplateOutlet="rectangleForm;"></ng-container>
+            </div>
+
+            <div id="squareForm" *ngSwitchCase="'square'">
+              <ng-container *ngTemplateOutlet="squareForm;"></ng-container>
+            </div>
+
+            <div id="circleForm" *ngSwitchCase="'circle'">
+              <ng-container *ngTemplateOutlet="circleForm;"></ng-container>
+            </div>
+
+            <div id="triangleForm" *ngSwitchCase="'triangle'">
+              <ng-container *ngTemplateOutlet="triangleForm;"></ng-container>
+            </div>
+          </div>
+        </td>
+      </tr>
+  </table>
+
+  <!-- Footer -->
+  <footer>
+      By Bryze Ntza
+  </footer>
+
+</div>
+
+<router-outlet></router-outlet>
